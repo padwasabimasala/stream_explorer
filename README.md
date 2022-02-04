@@ -9,7 +9,7 @@ ActiveAdmin app for exploring Eventide MessageDB messages
   rails db:migrate
   rails server
 ```
-You can explore your messages at admin at https://localhost:3000/admin/messages
+You can explore your messages at admin at http://localhost:3000/admin/messages
 
 The before you start you have to add an admin user the database via rails console
 ```
