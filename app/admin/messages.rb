@@ -54,6 +54,14 @@ ActiveAdmin.register Message do
         column :causation_history
       end
     end
+ 
+    panel "History Detail" do
+      table_for message.causation_history.reverse do
+        column :global_position
+        column :stream_name
+        column :type
+      end
+    end
 
     panel "Attributes" do
       table_for message do
