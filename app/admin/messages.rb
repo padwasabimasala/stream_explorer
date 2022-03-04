@@ -1,4 +1,5 @@
 ActiveAdmin.register Message do
+  actions :index, :show
 
   # Global position
   # Position
