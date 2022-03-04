@@ -8,7 +8,7 @@ ActiveAdmin.register Message do
   # Data
   # Metadata
   # Id
-  #
+
  index do
     column :global_position do |msg|
       link_to msg.global_position, admin_message_path(msg)
@@ -40,8 +40,43 @@ ActiveAdmin.register Message do
         raw(data)
       end
     end
+    #column :id # is same as global position
+  end
 
-    column :id
+  show do
+    panel "History" do
+      table_for message do
+        column :causation_history
+      end
+    end
+
+    panel "Attributes" do
+      table_for message do
+        column :global_position
+        column :position
+        column :time
+        column :stream_name
+        column :type
+        #row('Published?') { |b| status_tag b.published? }
+      end
+    end
+
+    panel "Data" do
+      attributes_table_for message.data do
+        # TODO sort as strings, numbers, dates, bools
+        message.data.keys.sort.each do |key|
+          row key
+        end
+      end
+    end
+  end
+
+  sidebar "MetaData", only: :show  do
+    attributes_table_for message.metadata do
+      message.metadata.keys.sort.each do |key|
+        row key
+      end
+    end
   end
 
   # See permitted parameters documentation:
@@ -58,5 +93,5 @@ ActiveAdmin.register Message do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
+
 end
