@@ -7,13 +7,16 @@ ActiveAdmin app for exploring Eventide MessageDB messages
 ```
   docker-compose up
   rails db:migrate
+  'rails runner 'AdminUser.create email: "admin@example.com", password: "password"''
   rails server
 ```
 You can explore your messages at admin at http://localhost:3000/admin/messages
 
-The before you start you have to add an admin user the database via rails console
-```
-  > AdminUser.create email: "admin@example.com", password: "password"
-```
+You can override the postgres database connection using standard PG envars like so
 
-
+```
+export PGHOST=
+export PGUSER=
+export PGDATABASE=
+export PGPASSWORD=
+```
