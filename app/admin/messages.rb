@@ -22,7 +22,11 @@ ActiveAdmin.register Message do
     column :type do |msg|
       link_to msg.type, admin_messages_path + "?q%5Btype_equals%5D=#{msg.type}&commit=Filter&order=global_position_desc"
     end
-    column :data
+    column :data do |msg|
+
+      part = msg.data.first(3).to_h
+      part.inspect[0..-1] + " ... }"
+    end
 
     # String parsing because I could not get HTML escaping to work properly when updating the hash values
     column :metadata do |msg|
