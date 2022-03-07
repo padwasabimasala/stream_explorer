@@ -11,25 +11,25 @@ ActiveAdmin.register Message do
   # Id
 
  index do
-    column :global_position do |msg|
+    column :global_position do|msg|
       link_to msg.global_position, admin_message_path(msg)
     end
     column :position
     column :time
-    column :stream_name do |msg|
+    column :stream_name do|msg|
       link_to msg.stream_name, admin_messages_path + "?q%5Bstream_name_equals%5D=#{msg.stream_name}&commit=Filter&order=global_position_desc"
     end
-    column :type do |msg|
+    column :type do|msg|
       link_to msg.type, admin_messages_path + "?q%5Btype_equals%5D=#{msg.type}&commit=Filter&order=global_position_desc"
     end
-    column :data do |msg|
+    column :data do|msg|
 
       part = msg.data.first(3).to_h
       part.inspect[0..-1] + " ... }"
     end
 
     # String parsing because I could not get HTML escaping to work properly when updating the hash values
-    column :metadata do |msg|
+    column :metadata do|msg|
       unless msg.metadata.nil?
         data = msg.metadata.inspect
         stream_name = msg.metadata["causationMessageStreamName"]
@@ -45,18 +45,47 @@ ActiveAdmin.register Message do
         raw(data)
       end
     end
-    #column :id # is same as global position
+
+    column :prev do|msg|
+      msg.causation_history.size
+    end
+    column :next do|msg|
+      msg.caused_messages.size
+    end
+    column :id # is same as global position
   end
 
-  show do
-    panel "History" do
+ show title: proc {|msg| "#{msg.type} - #{msg.global_position}"} do
+    h2 {"#{message.stream_name}"}
+
+    panel "Attributes" do
       table_for message do
-        column :causation_history
-        column :caused_messages
+        column :type
+        column :stream_name
+        column :global_position
+        column :time
+        column :position
       end
     end
- 
-    panel "History Detail" do
+
+    panel "Data" do
+      attributes_table_for message.data do
+        # TOdosort as strings, numbers, dates, bools
+        message.data.keys.sort.each do|key|
+          row key
+        end
+      end
+    end
+
+    panel "MetaData", only: :show  do
+      attributes_table_for message.metadata do
+        message.metadata.keys.sort.each do|key|
+          row key
+        end
+      end
+    end
+
+    panel "Ancestors Detail" do
       table_for message.causation_history.reverse do
         column :global_position
         column :stream_name
@@ -64,33 +93,39 @@ ActiveAdmin.register Message do
       end
     end
 
-    panel "Attributes" do
-      table_for message do
+    panel "Descendants" do
+      table_for message.caused_messages do|msg|
         column :global_position
-        column :position
-        column :time
         column :stream_name
         column :type
-        #row('Published?') { |b| status_tag b.published? }
       end
     end
 
-    panel "Data" do
-      attributes_table_for message.data do
-        # TODO sort as strings, numbers, dates, bools
-        message.data.keys.sort.each do |key|
-          row key
+    panel "Message Stream" do
+      #attributes_table_for message do
+      #  row :causation_history
+      #  row :caused_messages
+      #end
+
+      div(class: 'flex-wrapper') do
+        message.causation_history.reverse.each do|msg|
+          div(class: 'box arrow-bottom') do
+            msg.type
+            link_to msg.global_position, admin_message_path(msg)
+          end
+        end
+        div(class: 'box') do
+          link_to message.global_position, admin_message_path(message)
+        end
+
+        message.caused_messages.each do|msg|
+          div(class: 'box arrow-top') do
+            link_to msg.global_position, admin_message_path(msg)
+          end
         end
       end
     end
-  end
 
-  sidebar "MetaData", only: :show  do
-    attributes_table_for message.metadata do
-      message.metadata.keys.sort.each do |key|
-        row key
-      end
-    end
   end
 
   # See permitted parameters documentation:

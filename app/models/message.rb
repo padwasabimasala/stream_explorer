@@ -2,24 +2,18 @@ class Message < ApplicationRecord
   establish_connection :message_store
   self.inheritance_column = :_type_disabled
 
-  def caused_messages
-    #Dont work
-    #where("time - ?::datetime < 1", time)
-    #where("time - date(?) < 1", time)
-    #
-
-    Message.where( "(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).limit(10) # add time constraint and order by
-  end
-
   def causation_message_global_position
+    return unless metadata
     metadata["causationMessageGlobalPosition"]
   end
 
   def causation_message_stream_name
+    return unless metadata
     metadata["causationMessageStreamName"]
   end
 
   def trace_id
+    return unless metadata
     metadata.dig("properties", "traceId")
   end
 
@@ -39,6 +33,10 @@ class Message < ApplicationRecord
     end
 
     @causation_history
+  end
+
+  def caused_messages
+    Message.where("extract(epoch from time::timestamp - ?::timestamp)/3600 between 0 and 1", time).where("(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).order(:time).limit(10)
   end
 
 end
