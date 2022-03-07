@@ -2,6 +2,11 @@ class Message < ApplicationRecord
   establish_connection :message_store
   self.inheritance_column = :_type_disabled
 
+  def caused_messages
+    # 220347
+    Message.where( "(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).limit(10) # add time constraint and order by
+  end
+
   def causation_message_global_position
     metadata["causationMessageGlobalPosition"]
   end

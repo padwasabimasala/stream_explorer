@@ -52,6 +52,7 @@ ActiveAdmin.register Message do
     panel "History" do
       table_for message do
         column :causation_history
+        column :caused_messages
       end
     end
  
