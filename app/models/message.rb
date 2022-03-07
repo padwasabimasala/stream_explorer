@@ -3,7 +3,11 @@ class Message < ApplicationRecord
   self.inheritance_column = :_type_disabled
 
   def caused_messages
-    # 220347
+    #Dont work
+    #where("time - ?::datetime < 1", time)
+    #where("time - date(?) < 1", time)
+    #
+
     Message.where( "(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).limit(10) # add time constraint and order by
   end
 
@@ -24,30 +28,15 @@ class Message < ApplicationRecord
   end
 
   def causation_history
-    #@causation_history = [causation_message]
-
     unless false or @causation_history
-      pp :building_causation_history
       @causation_history = []
 
       cause = causation_message
-      pp cause_gp: causation_message_global_position
-      pp cause: cause
-      pp cause_nil: cause.nil?
-
-      cnt = 0
       while not cause.nil? do
-        pp cnt: cnt
-        cnt += 1
         @causation_history.append(cause)
         cause = cause.causation_message
-        pp next_cause: cause
       end
     end
-
-    #pp causation_message_gp: causation_message_global_position
-    #pp causation_message: causation_message
-    pp causation_history_size: @causation_history.size
 
     @causation_history
   end
