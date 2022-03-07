@@ -28,7 +28,7 @@ class Message < ApplicationRecord
   end
 
   def causation_history
-    unless false or @causation_history
+    unless @causation_history
       @causation_history = []
 
       cause = causation_message
