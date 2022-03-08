@@ -102,25 +102,20 @@ ActiveAdmin.register Message do
     end
 
     panel "Message Stream" do
-      #attributes_table_for message do
-      #  row :ancestors
-      #  row :descendants
-      #end
-
       div(class: 'flex-wrapper') do
         message.ancestors.reverse.each do|msg|
-          div(class: 'box arrow-bottom') do
-            msg.type
-            link_to msg.global_position, admin_message_path(msg)
+          div(class: 'box arrow-bottom flex-size-2') do
+            h3 { link_to "#{msg.type} - #{msg.global_position}",  admin_message_path(msg) }
           end
         end
+
         div(class: 'box flex-size-2') do
-          link_to message.global_position, admin_message_path(message)
+          h3 { link_to "#{message.type} - #{message.global_position}",  admin_message_path(message) }
         end
 
         message.descendants.each do|msg|
-          div(class: 'box arrow-top') do
-            link_to msg.global_position, admin_message_path(msg)
+          div(class: 'box arrow-top flex-size-1') do
+            h3 { link_to "#{msg.type} - #{msg.global_position}",  admin_message_path(msg) }
           end
         end
       end
