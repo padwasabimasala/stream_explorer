@@ -114,7 +114,7 @@ ActiveAdmin.register Message do
             link_to msg.global_position, admin_message_path(msg)
           end
         end
-        div(class: 'box') do
+        div(class: 'box flex-size-2') do
           link_to message.global_position, admin_message_path(message)
         end
 
