@@ -47,10 +47,10 @@ ActiveAdmin.register Message do
     end
 
     column :prev do|msg|
-      msg.causation_history.size
+      msg.ancestors.size
     end
     column :next do|msg|
-      msg.caused_messages.size
+      msg.descendants.size
     end
     column :id # is same as global position
   end
@@ -86,7 +86,7 @@ ActiveAdmin.register Message do
     end
 
     panel "Ancestors Detail" do
-      table_for message.causation_history.reverse do
+      table_for message.ancestors.reverse do
         column :global_position
         column :stream_name
         column :type
@@ -94,7 +94,7 @@ ActiveAdmin.register Message do
     end
 
     panel "Descendants" do
-      table_for message.caused_messages do|msg|
+      table_for message.descendants do|msg|
         column :global_position
         column :stream_name
         column :type
@@ -103,12 +103,12 @@ ActiveAdmin.register Message do
 
     panel "Message Stream" do
       #attributes_table_for message do
-      #  row :causation_history
-      #  row :caused_messages
+      #  row :ancestors
+      #  row :descendants
       #end
 
       div(class: 'flex-wrapper') do
-        message.causation_history.reverse.each do|msg|
+        message.ancestors.reverse.each do|msg|
           div(class: 'box arrow-bottom') do
             msg.type
             link_to msg.global_position, admin_message_path(msg)
@@ -118,7 +118,7 @@ ActiveAdmin.register Message do
           link_to message.global_position, admin_message_path(message)
         end
 
-        message.caused_messages.each do|msg|
+        message.descendants.each do|msg|
           div(class: 'box arrow-top') do
             link_to msg.global_position, admin_message_path(msg)
           end

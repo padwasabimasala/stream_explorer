@@ -21,21 +21,21 @@ class Message < ApplicationRecord
     Message.find_by_global_position causation_message_global_position
   end
 
-  def causation_history
-    unless @causation_history
-      @causation_history = []
+  def ancestors
+    unless @ancestors
+      @ancestors = []
 
       cause = causation_message
       while not cause.nil? do
-        @causation_history.append(cause)
+        @ancestors.append(cause)
         cause = cause.causation_message
       end
     end
 
-    @causation_history
+    @ancestors
   end
 
-  def caused_messages
+  def descendants
     Message.where("extract(epoch from time::timestamp - ?::timestamp)/3600 between 0 and 1", time).where("(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).order(:time).limit(10)
   end
 
