@@ -46,13 +46,13 @@ ActiveAdmin.register Message do
       end
     end
 
-    column :prev do|msg|
-      msg.ancestors.size
-    end
-    column :next do|msg|
-      msg.descendants.size
-    end
-    column :id # is same as global position
+    # Helpful for development purposes but no in production because query had no index and is expensive
+    # column :prev do|msg|
+    #   msg.ancestors.size
+    # end
+    # column :next do|msg|
+    #   msg.descendants.size
+    # end
   end
 
  show title: proc {|msg| "#{msg.type} - #{msg.global_position}"} do
