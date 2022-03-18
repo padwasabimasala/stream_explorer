@@ -107,7 +107,8 @@ ActiveAdmin.register Message do
       div(class: 'flex-wrapper') do
         message.ancestors.reverse.each do|msg|
           div(class: 'box arrow-bottom flex-size-2') do
-            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
+            #h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
+            render 'card', object: msg
           end
         end
 
