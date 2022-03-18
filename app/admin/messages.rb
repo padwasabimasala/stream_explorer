@@ -55,8 +55,10 @@ ActiveAdmin.register Message do
     # end
   end
 
- show title: proc {|msg| "#{msg.type} - #{msg.global_position}"} do
-    h2 {"#{message.stream_name}"}
+ show title: proc {|msg| "#{msg.type} (#{msg.stream_name_prefix}) - #{msg.global_position}"} do
+    #h2 {"#{message.stream_name}"}
+
+    render 'other'
 
     panel "Attributes" do
       table_for message do
@@ -105,17 +107,19 @@ ActiveAdmin.register Message do
       div(class: 'flex-wrapper') do
         message.ancestors.reverse.each do|msg|
           div(class: 'box arrow-bottom flex-size-2') do
-            h3 { link_to "#{msg.type} - #{msg.global_position}",  admin_message_path(msg) }
+            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
           end
         end
 
         div(class: 'box flex-size-2') do
-          h3 { link_to "#{message.type} - #{message.global_position}",  admin_message_path(message) }
+          #h2{ raw "#{message.stream_name_prefix} &rarr; #{message.type} - #{link_to message.global_position,  admin_message_path(message) }"}
+          render 'card'
         end
 
         message.descendants.each do|msg|
           div(class: 'box arrow-top flex-size-1') do
-            h3 { link_to "#{msg.type} - #{msg.global_position}",  admin_message_path(msg) }
+            #h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
+            render 'card', object: msg
           end
         end
       end

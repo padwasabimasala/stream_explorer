@@ -70,3 +70,6 @@
   border-left: none;
   border-bottom: 15px solid transparent;
 }
+
+.right-align { float: right }
+.left-align { float: left }

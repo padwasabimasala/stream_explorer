@@ -39,4 +39,8 @@ class Message < ApplicationRecord
     Message.where("extract(epoch from time::timestamp - ?::timestamp)/3600 between 0 and 1", time).where("(metadata->>'causationMessageGlobalPosition')::int = ?", global_position).order(:time).limit(10)
   end
 
+  def stream_name_prefix
+    stream_name.split('-').first
+  end
+
 end
