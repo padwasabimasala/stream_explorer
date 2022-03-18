@@ -4,13 +4,7 @@ ActiveAdmin app for exploring Eventide MessageDB messages
 
 # Quick Start
 
-Run `make`
-
-You can explore your messages at admin at http://localhost:3000/
-
-# Message Store Connection
-
-You can override the message store connection using standard PG envars like by exporting them in your environment and passing them into the docker container.
+Configure your message store connection in the environment and run `make`. If no params are set it will attempt to connect to the message_store database localhost on the default port with no password.
 
 ```
 export PGHOST=
@@ -18,8 +12,10 @@ export PGUSER=
 export PGDATABASE=
 export PGPASSWORD=
 
-docker run -p 3000:3000 --env PGPASSWORD --env PGHOST --env PGUSER --env PGDATABASE streamy
+make
 ```
+
+You can explore your messages at admin at http://localhost:3000/
 
 # Docker Compose and local development
 
