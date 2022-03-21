@@ -31,7 +31,7 @@ The message store runs on the default Postgres pots 5432. The Postgres db is the
 
 Message store and database configuration information can be found in config/database.yml
 
-# Authenticaion
+# Authentication
 
 Authentication is disabled by default. See details in [the guide](https://activeadmin.info/1-general-configuration.html)
 to enable authenticaion. If use enable admin user authentication you can create a user with `rails runner 'AdminUser.create email: "admin@example.com", password: "password"'`
