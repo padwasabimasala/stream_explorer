@@ -72,7 +72,7 @@ ActiveAdmin.register Message do
 
     panel "Data" do
       attributes_table_for message.data do
-        # TOdosort as strings, numbers, dates, bools
+        # TODO sort as strings, numbers, dates, bools
         message.data.keys.sort.each do|key|
           row key
         end
@@ -107,20 +107,17 @@ ActiveAdmin.register Message do
       div(class: 'flex-wrapper') do
         message.ancestors.reverse.each do|msg|
           div(class: 'box arrow-bottom flex-size-2') do
-            #h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
-            render 'card', locals: { msg: msg }
+            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
           end
         end
 
         div(class: 'box flex-size-2') do
-          #h2{ raw "#{message.stream_name_prefix} &rarr; #{message.type} - #{link_to message.global_position,  admin_message_path(message) }"}
-          render 'card', locals: { msg: @message }
+          h2{ raw "#{message.stream_name_prefix} &rarr; #{message.type} - #{link_to message.global_position,  admin_message_path(message) }"}
         end
 
         message.descendants.each do|msg|
           div(class: 'box arrow-top flex-size-1') do
-            #h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
-            render 'card', object: msg
+            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
           end
         end
       end
