@@ -36,3 +36,11 @@ Message store and database configuration information can be found in config/data
 Authentication is disabled by default. See details in [the guide](https://activeadmin.info/1-general-configuration.html)
 to enable authenticaion. If use enable admin user authentication you can create a user with `rails runner 'AdminUser.create email: "admin@example.com", password: "password"'`
 
+# Testing
+
+```
+  docker-compose up
+  bin/rails db:environment:set RAILS_ENV=test
+  bin/rails test
+```
+

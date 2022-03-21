@@ -58,7 +58,7 @@ ActiveAdmin.register Message do
  show title: proc {|msg| "#{msg.type} (#{msg.stream_name_prefix}) - #{msg.global_position}"} do
     #h2 {"#{message.stream_name}"}
 
-    render 'other'
+    render partial: 'salesforce_links'
 
     panel "Attributes" do
       table_for message do
