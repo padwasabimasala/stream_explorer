@@ -1,0 +1,3 @@
+class SalesforceLinker
+
+end

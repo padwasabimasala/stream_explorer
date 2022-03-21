@@ -1,4 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
+$: << File.join(File.dirname(__FILE__), '..', 'app', 'lib')
 require_relative "../config/environment"
 #Commented out to avoid attempting to reset the database when tests are run
 #require "rails/test_help"
