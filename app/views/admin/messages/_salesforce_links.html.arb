@@ -1,0 +1,11 @@
+require 'salesforce_linker'
+
+panel "Salesforce Links" do
+  linker = SalesforceLinker.new(message)
+  pp(message.data)
+
+  linker.links.each do |k,v|
+    para { link_to k,v }
+  end
+
+end

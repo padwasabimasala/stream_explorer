@@ -58,8 +58,6 @@ ActiveAdmin.register Message do
  show title: proc {|msg| "#{msg.type} (#{msg.stream_name_prefix}) - #{msg.global_position}"} do
     #h2 {"#{message.stream_name}"}
 
-    render partial: 'salesforce_links'
-
     panel "Attributes" do
       table_for message do
         column :type
@@ -86,6 +84,8 @@ ActiveAdmin.register Message do
         end
       end
     end
+
+    render partial: 'salesforce_links'
 
     panel "Ancestors Detail" do
       table_for message.ancestors.reverse do
