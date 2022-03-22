@@ -14,6 +14,10 @@ class SalesforceLinker
     if @message.data.dig('orderItems', 0, 'orderId')
       return {'Order' => url_base + 'Order/' + @message.data.dig('orderItems', 0, 'orderId') + '/view'}
     end
+    if @message.data.dig('account') && @message.data.dig('account').length == 18
+      return {'Account' => url_base + 'Account/' + @message.data.dig('account') + '/view'}
+    end
+    # TODO billing account, shipping account from data
   end
 
 end

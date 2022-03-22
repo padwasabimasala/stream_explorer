@@ -2,6 +2,7 @@ require "test_helper"
 require 'salesforce_linker'
 
 class SalesforceLinkTest < ActiveSupport::TestCase
+  example_data_json = {"id"=>"8018a000000Ti2RAAS", "name"=>nil, "type"=>"New", "status"=>"Draft", "poNumber"=>nil, "sequence"=>471717, "isDeleted"=>nil, "orderItems"=>[{"id"=>"8028a000002HVNqAAO", "orderId"=>"8018a000000Ti2RAAS", "quantity"=>1.0, "sequence"=>471690, "unitPrice"=>32346.0, "createdById"=>"0054W00000CLWe5QAH", "description"=>nil, "processedTime"=>"2022-03-18T18:09:39.004Z", "billingAccountC"=>"0018a00001maBpxAAE", "orderItemNumber"=>"0000000454", "lastModifiedById"=>"0054W00000CLWe5QAH", "originalOrderItemId"=>nil, "productAcumaticaExternalIdC"=>"105109"}, {"id"=>"8028a000002HVNuAAO", "orderId"=>"8018a000000Ti2RAAS", "quantity"=>1.0, "sequence"=>471693, "unitPrice"=>0.0, "createdById"=>"0054W00000CLWe5QAH", "description"=>nil, "processedTime"=>"2022-03-18T18:09:39.080Z", "billingAccountC"=>"0018a00001maBpxAAE", "orderItemNumber"=>"0000000458", "lastModifiedById"=>"0054W00000CLWe5QAH", "originalOrderItemId"=>nil, "productAcumaticaExternalIdC"=>"103288"}], "description"=>nil, "orderNumber"=>"00000163", "billingEmail"=>"innovion.accountspayable@ii-vi.com", "customerName"=>"II-VI", "billingStreet"=>nil, "effectiveDate"=>nil, "opportunityId"=>"0068a00001FVuO3AAL", "processedTime"=>"2022-03-18T18:28:18.474Z", "customerClassC"=>"OTHER", "shipToAccountC"=>"0018a00001nGCnvAAG", "billingAccountC"=>"0018a00001maBpxAAE", "originalOrderId"=>nil, "billingStateCode"=>nil, "lastModifiedById"=>"0054W00000CLWe5QAH", "lastModifiedDate"=>"2022-03-18T18:09:18.000+0000", "billingPostalCode"=>nil, "billingCountryCode"=>"US", "orderReferenceNumber"=>nil}
 
   test "it parses the object from the stream name" do
     msg = Message.new stream_name: "orderSfOpportunity-0068a00001FVuO3AAL"
@@ -10,9 +11,15 @@ class SalesforceLinkTest < ActiveSupport::TestCase
  linker.links)
   end
 
+  test "it finds the account from the attributes" do
+    msg = Message.new data: {'account' => '0018a00001maBpxAAE'}
+    linker = SalesforceLinker.new(msg)
+    assert_equal({'Account' => 'https://lvt.lightning.force.com/lightning/r/Account/0018a00001maBpxAAE/view'}, linker.links)
+  end
+
+
   test "it parses the data json" do
-    msg = Message.new data: {"id"=>"8018a000000Ti2RAAS", "name"=>nil, "type"=>"New", "status"=>"Draft", "poNumber"=>nil, "sequence"=>471717, "isDeleted"=>nil, "orderItems"=>[{"id"=>"8028a000002HVNqAAO", "orderId"=>"8018a000000Ti2RAAS", "quantity"=>1.0, "sequence"=>471690, "unitPrice"=>32346.0, "createdById"=>"0054W00000CLWe5QAH", "description"=>nil, "processedTime"=>"2022-03-18T18:09:39.004Z", "billingAccountC"=>"0018a00001maBpxAAE", "orderItemNumber"=>"0000000454", "lastModifiedById"=>"0054W00000CLWe5QAH", "originalOrderItemId"=>nil, "productAcumaticaExternalIdC"=>"105109"},
- {"id"=>"8028a000002HVNuAAO", "orderId"=>"8018a000000Ti2RAAS", "quantity"=>1.0, "sequence"=>471693, "unitPrice"=>0.0, "createdById"=>"0054W00000CLWe5QAH", "description"=>nil, "processedTime"=>"2022-03-18T18:09:39.080Z", "billingAccountC"=>"0018a00001maBpxAAE", "orderItemNumber"=>"0000000458", "lastModifiedById"=>"0054W00000CLWe5QAH", "originalOrderItemId"=>nil, "productAcumaticaExternalIdC"=>"103288"}]}
+    msg = Message.new data: example_data_json
     linker = SalesforceLinker.new(msg)
     assert_equal({'Order' => 'https://lvt.lightning.force.com/lightning/r/Order/8018a000000Ti2RAAS/view'}, linker.links)
   end
