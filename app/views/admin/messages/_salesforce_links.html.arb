@@ -1,6 +1,6 @@
 require 'salesforce_linker'
 
-panel "Salesforce Links" do
+panel "Salesforce Links", class: 'hidable hidable-hidden' do
   linker = SalesforceLinker.new(message)
   pp(message.data)
 

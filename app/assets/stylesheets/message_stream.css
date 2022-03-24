@@ -1,3 +1,18 @@
+.hidable-hidden .panel_contents {
+  display: none
+}
+
+.hidable-revealed .panel_contents {
+  display: block
+}
+
+.hidable-hidden h3::after {
+  content: " ∨"
+}
+
+.hidable-revealed h3::after {
+  content: " ∧"
+}
 /* https://codepen.io/lideo/pen/KKGeQG */
 .flex-wrapper {
   display: flex;

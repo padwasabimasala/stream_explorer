@@ -55,7 +55,7 @@ ActiveAdmin.register Message do
     # end
   end
 
- show title: proc {|msg| "#{msg.type} (#{msg.stream_name_prefix}) - #{msg.global_position}"} do
+ show title: proc {|msg| "##{msg.global_position} #{msg.stream_name_prefix} → #{msg.type}"} do
     #h2 {"#{message.stream_name}"}
 
     panel "Attributes" do
@@ -77,7 +77,7 @@ ActiveAdmin.register Message do
       end
     end
 
-    panel "MetaData", only: :show  do
+    panel "MetaData", only: :show, class: 'hidable hidable-hidden'  do
       attributes_table_for message.metadata do
         message.metadata.keys.sort.each do|key|
           row key
@@ -87,37 +87,22 @@ ActiveAdmin.register Message do
 
     render partial: 'salesforce_links'
 
-    panel "Ancestors Detail" do
-      table_for message.ancestors.reverse do
-        column :global_position
-        column :stream_name
-        column :type
-      end
-    end
-
-    panel "Descendants" do
-      table_for message.descendants do|msg|
-        column :global_position
-        column :stream_name
-        column :type
-      end
-    end
-
     panel "Message Stream" do
       div(class: 'flex-wrapper') do
         message.ancestors.reverse.each do|msg|
           div(class: 'box arrow-bottom flex-size-2') do
-            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
+            h2{ raw "#{link_to "#" + msg.global_position.to_s,  admin_message_path(msg) } #{msg.stream_name_prefix} → #{msg.type}"}
           end
         end
 
         div(class: 'box flex-size-2') do
-          h2{ raw "#{message.stream_name_prefix} &rarr; #{message.type} - #{link_to message.global_position,  admin_message_path(message) }"}
+          msg = message
+          h2{ raw "#{link_to "#" + msg.global_position.to_s,  admin_message_path(msg) } #{msg.stream_name_prefix} → #{msg.type}"}
         end
 
         message.descendants.each do|msg|
           div(class: 'box arrow-top flex-size-1') do
-            h2{ raw "#{msg.stream_name_prefix} &rarr; #{msg.type} - #{link_to msg.global_position,  admin_message_path(msg) }"}
+            h2{ raw "#{link_to "#" + msg.global_position.to_s,  admin_message_path(msg) } #{msg.stream_name_prefix} → #{msg.type}"}
           end
         end
       end
