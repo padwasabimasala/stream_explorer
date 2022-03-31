@@ -4,7 +4,7 @@ ActiveAdmin app for exploring Eventide MessageDB messages
 
 # Quick Start
 
-Configure your message store connection in the environment and run `make`. If no params are set it will attempt to connect to the message_store database localhost on the default port with no password.
+Configure your message store connection in the environment and run `make`.
 
 ```
 export PGHOST=
