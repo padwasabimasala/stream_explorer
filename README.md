@@ -31,6 +31,18 @@ The message store runs on the default Postgres pots 5432. The Postgres db is the
 
 Message store and database configuration information can be found in config/database.yml
 
+## Configuration
+
+### PORT
+
+By default the app listens on port 3000. This can be overwritten by exporting a PORT variable.
+
+```
+  # listen port 8080
+  export PORT=8080
+  make
+```
+
 # Authentication
 
 Authentication is disabled by default. See details in [the guide](https://activeadmin.info/1-general-configuration.html)
