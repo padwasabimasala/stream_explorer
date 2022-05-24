@@ -1,4 +1,5 @@
 ActiveAdmin.register Message do
+  menu priority: 1, label: "All Messages"
   actions :index, :show
 
   # Global position
