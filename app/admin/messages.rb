@@ -16,7 +16,7 @@ ActiveAdmin.register Message do
       link_to msg.global_position, admin_message_path(msg)
     end
     column :position
-    column :time
+    column :mst_time
     column :stream_name do|msg|
       link_to msg.stream_name, admin_messages_path + "?q%5Bstream_name_equals%5D=#{msg.stream_name}&commit=Filter&order=global_position_desc"
     end
@@ -64,7 +64,8 @@ ActiveAdmin.register Message do
         column :type
         column :stream_name
         column :global_position
-        column :time
+        column :mst_time
+        column :utc_time
         column :position
       end
     end
@@ -84,6 +85,10 @@ ActiveAdmin.register Message do
           row key
         end
       end
+    end
+
+    panel "CloudWatch Log" do
+      link_to(message.stream_name_prefix, message.link_to_logs, { "target": "_blank"})
     end
 
     render partial: 'salesforce_links'
