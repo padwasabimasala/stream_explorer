@@ -43,4 +43,37 @@ class Message < ApplicationRecord
     stream_name.split('-').first
   end
 
+  def utc_time
+    time
+  end
+
+  def mst_time
+    time.in_time_zone("MST") + 1.hour # Daylight
+  end
+
+  def link_to_logs
+    start_time = time - 1.minute
+    end_time = time + 1.minute
+    "https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logsV2:log-groups/log-group/$252F#{component_name}/log-events$3Fstart$3D#{start_time}$26end$3D#{end_time}"
+  end
+
+  def component_name
+    case
+    when stream_name.include?('order')
+      #contains order is order component
+      "order-component"
+    when stream_name.include?('acumatica')
+      # probably just contains acumatica customer
+      "acumatica-customer-component"
+    when stream_name.include?('salesforce') || stream_name.include?('sfimport')
+      "salesforce-import-component"
+      # probably just contains salesforce import
+    when stream_name.include?('location')
+      # will contain location
+      "location-component"
+    else
+      "idk"
+    end
+  end
+
 end
